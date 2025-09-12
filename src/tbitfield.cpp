@@ -67,7 +67,7 @@ int TBitField::GetBit(const int n) const // получить значение б
   int mask = GetMemMask(n);
   int res = (pMem[GetMemIndex(n)] & mask);
   if(res != 0) return 1;
-  return res;
+  else return 0;
 }
 
 // битовые операции
@@ -109,7 +109,7 @@ TBitField TBitField::operator|(const TBitField &bf) // операция "или"
   }
   else
   {
-    TBitField res(MemLen);
+    TBitField res(bf.MemLen);
     for(int i = 0; i < bf.MemLen - MemLen; ++i) res.pMem[i] = bf.pMem[i];
     for(int i = 0; i < MemLen; ++i)
       res.pMem[i + (bf.MemLen - MemLen)] = (pMem[i + (bf.MemLen - MemLen)] | bf.pMem[i]);
@@ -119,22 +119,46 @@ TBitField TBitField::operator|(const TBitField &bf) // операция "или"
 
 TBitField TBitField::operator&(const TBitField &bf) // операция "и"
 {
-    return TBitField(0);
+  if(MemLen > bf.MemLen)
+  {
+    TBitField res(BitLen);
+    for(int i = 0; i < MemLen - bf.MemLen; ++i) res.pMem[i] = 0;
+    for(int i = 0; i < bf.MemLen; ++i)
+      res.pMem[i + (MemLen - bf.MemLen)] = (pMem[i + (MemLen - bf.MemLen)] & bf.pMem[i]);
+    return res;
+  }
+  else
+  {
+    TBitField res(bf.BitLen);
+    for(int i = 0; i < bf.MemLen - MemLen; ++i) res.pMem[i] = 0;
+    for(int i = 0; i < MemLen; ++i)
+      res.pMem[i + (bf.MemLen - MemLen)] = (pMem[i + (bf.MemLen - MemLen)] & bf.pMem[i]);
+    return res;
+  } 
 }
 
 TBitField TBitField::operator~(void) // отрицание
 {
-    return TBitField(0);
+  TBitField res(BitLen);
+  for(int i = 0; i < res.MemLen; ++i) res.pMem[i] = ~pMem[i];
+  return res;
 }
 
 // ввод/вывод
 
 istream &operator>>(istream &istr, TBitField &bf) // ввод
 {
-    return istr;
+  // TBitField bf;
+  // std::cin >> bf;
+  return istr;
 }
 
 ostream &operator<<(ostream &ostr, const TBitField &bf) // вывод
 {
-    return ostr;
+  for(int i = bf.BitLen - 1; i >= 0; --i) 
+  {
+    std::cout << bf.GetBit(i);
+    if(i == sizeof(TELEM) - 1) std::cout << ' ';
+  }
+  return ostr;
 }
