@@ -104,12 +104,12 @@ TSet TSet::operator~(void) // дополнение
 
 istream &operator>>(istream &istr, TSet &s) // ввод
 {
-    std::cin >> s.BitField;
+    istr >> s.BitField;
     return istr;
 }
 
 ostream& operator<<(ostream &ostr, const TSet &s) // вывод
 {
-    std::cout << s.BitField;
+    for(int i = 0; i < s.BitField.GetLength(); ++i) if(s.BitField.GetBit(i)) ostr << i << ' ';
     return ostr;
 }

@@ -157,7 +157,7 @@ TBitField TBitField::operator~(void) // отрицание
 
 istream &operator>>(istream &istr, TBitField &bf) // ввод
 {
-  for(int i = 0; i < bf.MemLen; ++i) std::cin >> bf.pMem[i];
+  for(int i = 0; i < bf.MemLen; ++i) istr >> bf.pMem[i];
   return istr;
 }
 
@@ -165,7 +165,7 @@ ostream &operator<<(ostream &ostr, const TBitField &bf) // вывод
 {
   for(int i = 0; i < bf.BitLen; ++i) 
   {
-    std::cout << bf.GetBit(i);
+    ostr << bf.GetBit(i);
   }
   return ostr;
 }
